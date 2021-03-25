@@ -1,0 +1,31 @@
+extends RigidBody
+
+var badguy = preload("res://Bad guy.tscn")
+
+var pressed = 0
+
+func _ready():
+	pass
+
+func _process(delta):
+	if pressed == 1:
+		destroy()
+		respawn()
+		pressed -= 1
+
+func destroy():
+	var numofchild = self.get_child_count()
+	if numofchild > 0:
+		var children = get_children()
+		for c in children:
+			if c.is_in_group("Enemy"):
+				remove_child(c)
+				c.queue_free()
+		print(numofchild, " Entities Destroyed")
+	else: 
+		print("Not Destroyed")
+		#self.get_child(0).queue.free()
+
+func respawn():
+	var badguy_instance = badguy.instance()
+	self.add_child(badguy_instance)
